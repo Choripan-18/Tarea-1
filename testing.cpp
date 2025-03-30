@@ -87,9 +87,22 @@ void operacion_3(Imagen* img, float atenuacion) {
 // Operación 4
 void operacion_4(Imagen* img, int umbral) {
     //cambio a blanco y negro
-    for (int i = 0; i < img->width * img->height * img->channels; i++) { //recorre todos los pixeles
-        
-        img->data[i] = (img->data[i] > umbral) ? 255 : 0; //convierte los pixeles a blanco o negro dependiendo si estan sobre o bajo el umbral respectivamente
+    for (int i = 0; i < img->width * img->height; i++) { // Recorre cada píxel
+        int canal = i * img->channels; // busca los canales correspondientes al pixel
+        unsigned char r = img->data[canal];     // Canal rojo
+        unsigned char g = img->data[canal + 1]; // Canal verde
+        unsigned char b = img->data[canal + 2]; // Canal azul
+
+        // Calcular iluminacion del pixel
+        unsigned char iluminacion = static_cast<unsigned char>(0.3 * r + 0.59 * g + 0.11 * b);
+
+        // Comparar la luminancia con el umbral
+        unsigned char cambio = (iluminacion > umbral) ? 255 : 0;  // condicion? si cumple : si no cumple
+
+        // cambiar todos los canales segun corresponda
+        img->data[canal] = cambio;     // Canal rojo
+        img->data[canal + 1] = cambio; // Canal verde
+        img->data[canal+ 2] = cambio; // Canal azul
     }
 }
 
@@ -109,13 +122,13 @@ int main() {
     delete img2;
 
     Imagen* img3 = load("Pikachu.png");
-    operacion_3(img3, 0.8);
+    operacion_3(img3, 0.6);
     save(img3, "pikachu atenuado.png");
     delete[] img3->data;
     delete img3;
 
     Imagen* img4 = load("Pikachu.png");
-    operacion_4(img4, 70);
+    operacion_4(img4, 150);
     save(img4, "pikachu byn.png");
     delete[] img4->data;
     delete img4;
