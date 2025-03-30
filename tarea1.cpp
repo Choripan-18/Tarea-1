@@ -28,14 +28,6 @@ void save(Imagen* img, const char* filename) {
 }
 
 
-// Operación 4
-void operacion_4(int umbral) {
-    
-    for (int i = 0; i < img->width * img->height * img->channels; i++) {
-        
-        img.data[i] = (img.data[i] > umbral) ? 255 : 0;
-    }
-}
 
 
 int main() {

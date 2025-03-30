@@ -28,7 +28,7 @@ void save(Imagen* img, const char* filename) {
 }
 
 //Operacion 1
-void reflexion(Imagen* img){
+void operacion_1(Imagen* img){
 // Reflexion horizontal de la imagen
     for(int i = 0; i < img->height; i++){    //Recorre las filas
         for(int j = 0; j < img->width/2; j++){ //Recorre las columnas hasta la mitad
@@ -44,7 +44,7 @@ void reflexion(Imagen* img){
 }
 
 //Operacion 2
-void rotacion(Imagen* img){
+void operacion_2(Imagen* img){
     // Rotacion de 90 grados de la imagen
     Imagen* img_rot = new Imagen(); // Crear nueva imagen
     // Asignamos dimensiones a la nueva imagen
@@ -74,25 +74,53 @@ void rotacion(Imagen* img){
     
 }
 
+//operacion 3
 
+void operacion_3(Imagen* img, float atenuacion) {
+    // Atenuación de la imagen
+    for (int i = 0; i < img->width * img->height * img->channels; i++) { //recorre todos los pixeles
+        img->data[i] = static_cast<unsigned char>(img->data[i] * atenuacion); //multiplica el valor del pixel por la atenuacion
+    }
+}
+
+
+// Operación 4
+void operacion_4(Imagen* img, int umbral) {
+    //cambio a blanco y negro
+    for (int i = 0; i < img->width * img->height * img->channels; i++) { //recorre todos los pixeles
+        
+        img->data[i] = (img->data[i] > umbral) ? 255 : 0; //convierte los pixeles a blanco o negro dependiendo si estan sobre o bajo el umbral respectivamente
+    }
+}
 
 
 int main() {
 
-    Imagen* img = load("pikachu.png");
-    reflexion(img);
+    Imagen* img = load("Pikachu.png");
+    operacion_1(img);
     save(img, "output.png");
     delete[] img->data;
     delete img;
 
-    Imagen* img2 = load("pikachu.png");
-    rotacion(img2);
+    Imagen* img2 = load("Pikachu.png");
+    operacion_2(img2);
     save(img2, "output_rot.png");
     delete[] img2->data;
     delete img2;
 
- 
-    return 0;
+    Imagen* img3 = load("Pikachu.png");
+    operacion_3(img3, 0.8);
+    save(img3, "pikachu atenuado.png");
+    delete[] img3->data;
+    delete img3;
 
+    Imagen* img4 = load("Pikachu.png");
+    operacion_4(img4, 70);
+    save(img4, "pikachu byn.png");
+    delete[] img4->data;
+    delete img4;
+
+
+    return 0;
 
 }
