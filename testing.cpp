@@ -78,13 +78,13 @@ void operacion_2(Imagen* img){
 
 void operacion_3(Imagen* img, float atenuacion) {
     // Atenuación de la imagen
-    for (int i = 0; i < img->width * img->height * img->channels; i++) { //recorre todos los pixeles
-        img->data[i] = static_cast<unsigned char>(img->data[i] * atenuacion); //multiplica el valor del pixel por la atenuacion
+    for (int i = 0; i < img->width * img->height * img->channels; i++) { //recorre todos los pixeles y canales
+        img->data[i] = static_cast<unsigned char>(img->data[i] + (255 - img->data[i])* atenuacion); //aplica la atenuacion a cada canal de los pixeles
     }
 }
 
 
-// Operación 4
+// Operacion 4
 void operacion_4(Imagen* img, int umbral) {
     //cambio a blanco y negro
     for (int i = 0; i < img->width * img->height; i++) { // Recorre cada píxel
@@ -93,7 +93,7 @@ void operacion_4(Imagen* img, int umbral) {
         unsigned char g = img->data[canal + 1]; // Canal verde
         unsigned char b = img->data[canal + 2]; // Canal azul
 
-        // Calcular iluminacion del pixel
+        // Calcular iluminacion del pixel usando formula estandar
         unsigned char iluminacion = static_cast<unsigned char>(0.3 * r + 0.59 * g + 0.11 * b);
 
         // Comparar la luminancia con el umbral
@@ -122,7 +122,7 @@ int main() {
     delete img2;
 
     Imagen* img3 = load("Pikachu.png");
-    operacion_3(img3, 0.6);
+    operacion_3(img3, 0.9);
     save(img3, "pikachu atenuado.png");
     delete[] img3->data;
     delete img3;
