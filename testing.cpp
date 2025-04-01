@@ -106,6 +106,30 @@ void operacion_4(Imagen* img, int umbral) {
     }
 }
 
+// operacion ascii
+char to_ascii(Imagen* img, const char* arreglo) {
+    // identificar los canales de cada pixel
+    char arrAscii;
+    for (int i = 0; i < img->height; i++) { // recorre cada fila
+        for (int j = 0; j < img->width; j++) { // recorre cada columna
+            int canal = (i * img->width + j) * img->channels; // busca los canales correspondientes al pixel
+            unsigned char r = img->data[canal];     // canal rojo
+            unsigned char g = img->data[canal + 1]; // canal verde
+            unsigned char b = img->data[canal + 2]; // canal azul
+
+            // calcular iluminacion del pixel usando formula estandar
+            unsigned char iluminacion = static_cast<unsigned char>(0.3 * r + 0.59 * g + 0.11 * b);
+
+            // convertir la iluminacion a un caracter ascii
+            char ascii = arreglo[iluminacion / 255 * (strlen(arreglo)) - 1]; // calcula el indice en el arreglo ascii segun la iluminacion
+            arrAscii [i][j] = ascii; // guarda el caracter ascii en el arreglo de salida en la posicion correspondiente al pixel de la imagen
+        }
+    }
+    return arrAscii; // devuelve el arreglo de caracteres ascii correspondiente a la imagen
+}
+
+
+
 
 int main() {
 
@@ -133,6 +157,8 @@ int main() {
     delete[] img4->data;
     delete img4;
 
+    Imagen* img5 = load("Pikachu.png");
+    to_ascii(img5, "@%#*+=-:. ");
 
     return 0;
 
