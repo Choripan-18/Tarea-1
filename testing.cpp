@@ -5,6 +5,8 @@
 #include "stb_image.h"
 #include "stb_image_write.h"
 #include <iostream>
+#include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -107,6 +109,23 @@ void operacion_4(Imagen* img, int umbral) {
 }
 
 
+
+void save_ascii(char** ascii_img, const string& filename, Imagen* img){
+    // Guardar la imagen ASCII en un archivo
+    ofstream file(filename);
+    if (file.is_open()) {
+        for (int i = 0; i < img->height; i++) {
+            file << ascii_img[i] << endl; // Guardar cada fila de la imagen ASCII
+        }
+        file.close();
+        cout << "Imagen ASCII guardada: " << filename << endl;
+    } else {
+        cout << "Error al abrir el archivo para guardar la imagen ASCII." << endl;
+    }
+}
+
+
+
 int main() {
 
     Imagen* img = load("Pikachu.png");
@@ -132,8 +151,5 @@ int main() {
     save(img4, "pikachu byn.png");
     delete[] img4->data;
     delete img4;
-
-
-    return 0;
 
 }
