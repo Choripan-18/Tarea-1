@@ -108,14 +108,43 @@ void operacion_4(Imagen* img, int umbral) {
     }
 }
 
+// operacion ascii
+char** to_ascii(Imagen* img, const char* arreglo) {
+    // identificar los canales de cada pixel
+    char** arrAscii = new char*[img->height]; // crear un arreglo de punteros para cada fila
+    for (int i = 0; i < img->height; i++){
+        arrAscii[i] = new char[img->width + 1]; // crear un arreglo de caracteres para cada fila + 1 para el caracter nulo
+        arrAscii[i][img->width] = '\0'; // agregar el caracter nulo al final de cada fila
+    }
+    for (int i = 0; i < img->height; i++) { // recorre cada fila
+        for (int j = 0; j < img->width; j++) { // recorre cada columna
+            int canal = (i * img->width + j) * img->channels; // busca los canales correspondientes al pixel
+            unsigned char r = img->data[canal];     // canal rojo
+            unsigned char g = img->data[canal + 1]; // canal verde
+            unsigned char b = img->data[canal + 2]; // canal azul
+
+            // calcular iluminacion del pixel usando formula estandar
+            unsigned char iluminacion = static_cast<unsigned char>(0.3 * r + 0.59 * g + 0.11 * b);
+
+            // convertir la iluminacion a un caracter ascii
+            int index = iluminacion * strlen(arreglo) / 256; // calcula el indice en el arreglo ascii segun la iluminacion
+            if (index > strlen(arreglo)) index = strlen(arreglo) - 1; // si el indice es mayor o igual al tamaño del arreglo, lo ajusta
+            arrAscii [i][j] = arreglo[index]; // guarda el caracter ascii en el arreglo de salida en la posicion correspondiente al pixel de la imagen
+        }
+    }
+    return arrAscii; // devuelve el arreglo de caracteres ascii correspondiente a la imagen
+}
 
 
-void save_ascii(char** ascii_img, const string& filename, Imagen* img){
+void save_ascii(char** arrAscii, const string& filename, Imagen* img){
     // Guardar la imagen ASCII en un archivo
     ofstream file(filename);
     if (file.is_open()) {
         for (int i = 0; i < img->height; i++) {
-            file << ascii_img[i] << endl; // Guardar cada fila de la imagen ASCII
+            for (int j = 0; j < img->width; j++) {
+                file << arrAscii[i][j]; // Escribir el caracter ascii en el archivo
+            }
+            file << endl; // Nueva línea al final de cada filas
         }
         file.close();
         cout << "Imagen ASCII guardada: " << filename << endl;
@@ -127,6 +156,7 @@ void save_ascii(char** ascii_img, const string& filename, Imagen* img){
 
 
 int main() {
+
 
     Imagen* img = load("Pikachu.png");
     operacion_1(img);
@@ -151,5 +181,21 @@ int main() {
     save(img4, "pikachu byn.png");
     delete[] img4->data;
     delete img4;
+
+    Imagen* img5 = load("muerte.png");
+    const char* characters = "@$B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
+    char** arrAscii = to_ascii(img5, characters);
+    save_ascii(arrAscii, "imagen_ascii.txt", img5);
+    for (int i = 0; i < img5->height; i++) {
+        delete[] arrAscii[i]; // liberar memoria de cada fila
+    }
+    delete[] arrAscii; // liberar memoria del arreglo de filas
+    delete[] img5->data; // liberar memoria de la imagen
+    delete img5; // liberar memoria de la imagen
+
+
+
+    return 0;
+
 
 }
