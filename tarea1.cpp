@@ -45,12 +45,10 @@ void operacion_1(Imagen* img){
     }
 }
 
-//Operacion 2
 void operacion_2(Imagen* img){
     // Rotacion de 90 grados de la imagen
     Imagen* img_rot = new Imagen(); // Crear nueva imagen
-    // Asignamos dimensiones a la nueva imagen
-    img_rot->width = img->height;
+    img_rot->width = img->height; //Asignamos dimensiones a la nueva imagen
     img_rot->height = img->width;
     img_rot->channels = img->channels;
     img_rot->data = new unsigned char[img_rot->width*img_rot->height*img_rot->channels];
@@ -76,8 +74,6 @@ void operacion_2(Imagen* img){
     
 }
 
-//operacion 3
-
 void operacion_3(Imagen* img, float atenuacion) {
     // Atenuación de la imagen
     for (int i = 0; i < img->width * img->height * img->channels; i++) { //recorre todos los pixeles
@@ -86,7 +82,6 @@ void operacion_3(Imagen* img, float atenuacion) {
 }
 
 
-// Operación 4
 void operacion_4(Imagen* img, int umbral) {
     //cambio a blanco y negro
     for (int i = 0; i < img->width * img->height; i++) { // Recorre cada píxel
@@ -108,7 +103,7 @@ void operacion_4(Imagen* img, int umbral) {
     }
 }
 
-// operacion ascii
+
 char** to_ascii(Imagen* img, const char* arreglo) {
     // identificar los canales de cada pixel
     char** arrAscii = new char*[img->height]; // crear un arreglo de punteros para cada fila
