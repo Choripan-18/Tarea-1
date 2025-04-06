@@ -76,8 +76,8 @@ void operacion_2(Imagen* img){
 
 void operacion_3(Imagen* img, float atenuacion) {
     // Atenuación de la imagen
-    for (int i = 0; i < img->width * img->height * img->channels; i++) { //recorre todos los pixeles
-        img->data[i] = static_cast<unsigned char>(img->data[i] * atenuacion); //multiplica el valor del pixel por la atenuacion
+    for (int i = 0; i < img->width * img->height * img->channels; i++) { //recorre todos los pixeles y canales
+        img->data[i] = static_cast<unsigned char>(img->data[i] + (255 - img->data[i])* atenuacion); //aplica la atenuacion a cada canal de los pixeles
     }
 }
 
@@ -122,8 +122,7 @@ char** to_ascii(Imagen* img, const char* arreglo) {
             unsigned char iluminacion = static_cast<unsigned char>(0.3 * r + 0.59 * g + 0.11 * b);
 
             // convertir la iluminacion a un caracter ascii
-            int index = iluminacion * strlen(arreglo) / 256; // calcula el indice en el arreglo ascii segun la iluminacion
-            if (index > strlen(arreglo)) index = strlen(arreglo) - 1; // si el indice es mayor o igual al tamaño del arreglo, lo ajusta
+            int index = iluminacion * (strlen(arreglo) - 1) / 255; // calcula un indice en el arreglo de caracteres ascii para la iluminacion del pixel
             arrAscii [i][j] = arreglo[index]; // guarda el caracter ascii en el arreglo de salida en la posicion correspondiente al pixel de la imagen
         }
     }
@@ -155,13 +154,13 @@ int main() {
 
     Imagen* img = load("Pikachu.png");
     operacion_1(img);
-    save(img, "output.png");
+    save(img, "pikachu reflejado.png");
     delete[] img->data;
     delete img;
 
     Imagen* img2 = load("Pikachu.png");
     operacion_2(img2);
-    save(img2, "output_rot.png");
+    save(img2, "pikachu rotado.png");
     delete[] img2->data;
     delete img2;
 
@@ -177,10 +176,10 @@ int main() {
     delete[] img4->data;
     delete img4;
 
-    Imagen* img5 = load("muerte.png");
+    Imagen* img5 = load("Pikachu.png");
     const char* characters = "@$B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/|()1{}[]?-_+~<>i!lI;:,\"^`'. ";
     char** arrAscii = to_ascii(img5, characters);
-    save_ascii(arrAscii, "imagen_ascii.txt", img5);
+    save_ascii(arrAscii, "pikachu ascii.txt", img5);
     for (int i = 0; i < img5->height; i++) {
         delete[] arrAscii[i]; // liberar memoria de cada fila
     }

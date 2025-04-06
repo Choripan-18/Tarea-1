@@ -37,3 +37,6 @@ Fuentes:
 	4. Vision y Robotica. (11/03/2021). Cómo convertir imagen RGB a escala de grises (GUÍA COMPLETA!!! 🔥)
 		Recuperado de https://www.youtube.com/watch?v=qPclS-zV458
 
+Pregunta 6: El error puede ser, por experiencia, que la condición (si la iluminación del píxel es mayor o menor que el umbral dado como parámetro
+a la función) se evalúa para cada canal del píxel por separado, en vez de tomar los 3 canales en conjunto para calcular la iluminación del píxel
+usando la fórmula estándar y luego reemplazando los 3 canales por el mismo valor (0 o 255).
